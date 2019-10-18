@@ -32,7 +32,9 @@ export class AuthService {
       .post<AuthRespose>('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDbzqPQqrtvPmuL1VHgr-Spaf1kpA3nTUg', data)
       .pipe(
         catchError(this.handleError),
-        tap(this.handleSuccess)
+        tap(response => {
+          this.handleSuccess(response);
+        })
       );
   }
 
@@ -47,7 +49,9 @@ export class AuthService {
       .post<AuthRespose>('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyDbzqPQqrtvPmuL1VHgr-Spaf1kpA3nTUg', data)
       .pipe(
         catchError(this.handleError),
-        tap(this.handleSuccess)
+        tap(response => {
+          this.handleSuccess(response);
+        })
       );
   }
 
@@ -61,7 +65,7 @@ export class AuthService {
       response.idToken,
       expirationDate
     );
-  
+
     this.user.next(user);
   }
 
