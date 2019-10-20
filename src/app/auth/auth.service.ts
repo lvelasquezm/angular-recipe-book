@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { catchError, tap } from 'rxjs/operators';
-import { throwError, Subject } from 'rxjs';
+import { throwError, BehaviorSubject } from 'rxjs';
 
 import { User } from './user.model';
 
@@ -17,7 +17,7 @@ export interface AuthRespose {
 
 @Injectable()
 export class AuthService {
-  user = new Subject<User>();
+  user = new BehaviorSubject<User>(null);
 
   constructor(private http: HttpClient) {}
 
@@ -57,7 +57,7 @@ export class AuthService {
 
   private handleSuccess(response: AuthRespose) {
     const expirationDate = new Date(
-      new Date().getTime() + +response.expiresIn
+      new Date().getTime() + (+response.expiresIn * 1000)
     );
     const user = new User(
       response.localId,
