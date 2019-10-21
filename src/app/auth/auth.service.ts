@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Router } from '@angular/router';
 import { catchError, tap } from 'rxjs/operators';
 import { throwError, BehaviorSubject } from 'rxjs';
 
@@ -19,7 +20,8 @@ export interface AuthRespose {
 export class AuthService {
   user = new BehaviorSubject<User>(null);
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient,
+              private router: Router) {}
 
   signup(email: string, password: string) {
     const data = {
@@ -53,6 +55,11 @@ export class AuthService {
           this.handleSuccess(response);
         })
       );
+  }
+
+  logout() {
+    this.user.next(null);
+    this.router.navigate(['/auth']);
   }
 
   private handleSuccess(response: AuthRespose) {
